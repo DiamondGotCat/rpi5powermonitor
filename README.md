@@ -5,17 +5,30 @@
 Power Monitoring CLI Tool for Raspberry Pi 5+
 
 ## Installation
-with uv:
+
+### uv
 ```
 uv tool install rpi5powermonitor
 ```
 
-with pip:
+**Update:**
+
+```
+uv tool install rpi5powermonitor --upgrade
+```
+
+### pip
 ```
 pip3 install rpi5powermonitor
 ```
 
+**Update:**
+```
+pip3 install rpi5powermonitor --upgrade
+```
+
 ## Usage
+
 ### Command
 ```bash
 rpi5pm
