@@ -3,3 +3,30 @@
 
 # rpi5powermonitor
 Power Monitoring CLI Tool for Raspberry Pi 5+
+
+## Installation
+with uv:
+```
+uv tool install rpi5powermonitor
+```
+
+with pip:
+```
+pip3 install rpi5powermonitor
+```
+
+## Usage
+### Command
+```bash
+rpi5pm
+```
+
+### When running without sudo authentication
+```
+[nercone@dgc-rpi5 ~]$ rpi5pm
+Raspberry Pi 5 Power Monitor
+This tool requires superuser privileges, enter your password if prompted.
+[sudo] password for nercone: 
+```
+
+**Note:** When rpi5pm is executed within the expiration date of sudo authentication, the authentication prompt will be skipped.
