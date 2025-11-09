@@ -11,7 +11,7 @@ Power Monitoring CLI Tool for Raspberry Pi 5+
 uv tool install rpi5powermonitor
 ```
 
-**Update:**
+**Update**
 
 ```
 uv tool install rpi5powermonitor --upgrade
@@ -22,7 +22,7 @@ uv tool install rpi5powermonitor --upgrade
 pip3 install rpi5powermonitor
 ```
 
-**Update:**
+**Update**
 ```
 pip3 install rpi5powermonitor --upgrade
 ```
@@ -34,7 +34,7 @@ pip3 install rpi5powermonitor --upgrade
 rpi5pm
 ```
 
-### When running without sudo authentication
+**When running without sudo authentication**
 ```
 [nercone@dgc-rpi5 ~]$ rpi5pm
 Raspberry Pi 5 Power Monitor
