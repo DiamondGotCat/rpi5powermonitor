@@ -244,46 +244,46 @@ def render_footer(last_update: float) -> Panel:
 
 def main(interval: float = 1.0) -> None:
     try:
-        ensure_sudo()
-    except RuntimeError as e:
-        console.print(f"[bold red]{e}[/bold red]")
-        return
+        try:
+            ensure_sudo()
+        except RuntimeError as e:
+            console.print(f"[bold red]{e}[/bold red]")
+            return
 
-    layout = build_layout()
-    last_error: Optional[str] = None
+        layout = build_layout()
+        last_error: Optional[str] = None
 
-    with Live(layout, console=console, screen=True, refresh_per_second=10):
-        while True:
-            try:
-                raw = run_pmic_read_adc()
-                rails = parse_pmic_output(raw)
-            except KeyboardInterrupt:
-                raise
-            except Exception as e:
-                last_error = str(e)
-                layout["footer"].update(
-                    Panel(
-                        f"[bold red]Error:[/bold red] {last_error}",
-                        box=box.SQUARE,
+        with Live(layout, console=console, screen=True, refresh_per_second=10):
+            while True:
+                try:
+                    raw = run_pmic_read_adc()
+                    rails = parse_pmic_output(raw)
+                except KeyboardInterrupt:
+                    raise
+                except Exception as e:
+                    last_error = str(e)
+                    layout["footer"].update(
+                        Panel(
+                            f"[bold red]Error:[/bold red] {last_error}",
+                            box=box.SQUARE,
+                        )
                     )
-                )
-                break
+                    break
 
-            now = time.time()
+                now = time.time()
 
-            layout["header"].update(render_header(interval))
-            layout["rails"].update(render_rails_table(rails))
-            layout["bars"].update(render_bars(rails))
-            layout["summary"].update(render_summary(rails))
-            layout["footer"].update(render_footer(now))
+                layout["header"].update(render_header(interval))
+                layout["rails"].update(render_rails_table(rails))
+                layout["bars"].update(render_bars(rails))
+                layout["summary"].update(render_summary(rails))
+                layout["footer"].update(render_footer(now))
 
-            time.sleep(interval)
+                time.sleep(interval)
 
-    if last_error:
-        console.print(f"\n[bold red]Stopped:[/bold red] {last_error}")
-
-if __name__ == "__main__":
-    try:
-        main(interval=1.0)
+        if last_error:
+            console.print(f"\n[bold red]Stopped:[/bold red] {last_error}")
     except KeyboardInterrupt:
         console.print("\n[bold red]Aborted.[/bold red]")
+
+if __name__ == "__main__":
+    main(interval=1.0)
