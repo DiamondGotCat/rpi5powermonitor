@@ -6,9 +6,19 @@ build-backend = "uv_build"
 name = "rpi5powermonitor"
 version = "0.1.0"
 description = "Power Monitoring CLI Tool for Raspberry Pi 5+"
+authors = [
+    { name = "DiamondGotCat", email = "nercone@diamondgotcat.net" },
+]
+readme = "README.md"
+license = { text = "MIT" }
 requires-python = ">=3.9"
 dependencies = [
     "rich"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
 ]
 
 [project.scripts]
