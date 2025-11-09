@@ -1,0 +1,15 @@
+[build-system]
+requires = ["uv_build>=0.9.5,<0.10.0"]
+build-backend = "uv_build"
+
+[project]
+name = "rpi5powermonitor"
+version = "0.1.0"
+description = "Power Monitoring CLI Tool for Raspberry Pi 5+"
+requires-python = ">=3.9"
+dependencies = [
+    "rich"
+]
+
+[project.scripts]
+rpi5pm = "rpi5powermonitor.cli:main"
