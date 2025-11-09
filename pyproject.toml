@@ -4,7 +4,7 @@ build-backend = "uv_build"
 
 [project]
 name = "rpi5powermonitor"
-version = "0.1.1"
+version = "0.2.0"
 description = "Power Monitoring CLI Tool for Raspberry Pi 5+"
 authors = [
     { name = "DiamondGotCat", email = "nercone@diamondgotcat.net" },
