@@ -28,27 +28,41 @@ class Rail:
     current: Optional[float] = None
     idx_v: Optional[int] = None
     idx_i: Optional[int] = None
-    
+
     @property
     def power(self) -> Optional[float]:
         if self.voltage is not None and self.current is not None:
             return self.voltage * self.current
         return None
 
+def ensure_sudo() -> None:
+    console.print(
+        "[bold cyan]Raspberry Pi 5 Power Monitor[/bold cyan]\n"
+        "[bold]This tool requires superuser privileges, enter your password if prompted.[/bold]"
+    )
+    try:
+        subprocess.run(["sudo", "-v"], check=True)
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("Authentication failed. The program will now terminate.") from e
+
 def run_pmic_read_adc() -> str:
     try:
         out = subprocess.check_output(
-            ["sudo", "vcgencmd", "pmic_read_adc"],
+            ["sudo", "-n", "vcgencmd", "pmic_read_adc"],
             text=True,
             stderr=subprocess.STDOUT,
         )
+        if not out.strip():
+            raise RuntimeError("'vcgencmd pmic_read_adc' returned empty output.")
         return out
     except FileNotFoundError:
-        console.print("[red]'vcgencmd' command not found.[/red]")
-        raise
+        raise RuntimeError("'vcgencmd' command not found.")
     except subprocess.CalledProcessError as e:
-        console.print(f"[red]'vcgencmd' command execution failed: {e.output}[/red]")
-        raise
+        msg = (e.output or "").strip()
+        raise RuntimeError(
+            "Failed to execute 'vcgencmd pmic_read_adc' via sudo.\nTip: Your sudo may have expired.\nThis monitor will be terminated, so please run it again and authenticate."
+            + (f"\nDetails: {msg}" if msg else "")
+        ) from e
 
 def parse_pmic_output(text: str) -> Dict[str, Rail]:
     rails: Dict[str, Rail] = {}
@@ -111,7 +125,7 @@ def build_layout() -> Layout:
 def render_header(interval: float) -> Panel:
     return Panel(
         f"[bold cyan]Raspberry Pi 5 Power Monitor[/bold cyan]  "
-        f"(vcgencmd pmic_read_adc, refresh: {interval:.1f}s)",
+        f"(vcgencmd pmic_read_adc via sudo, refresh: {interval:.1f}s)",
         box=box.ROUNDED,
     )
 
@@ -229,14 +243,30 @@ def render_footer(last_update: float) -> Panel:
     )
 
 def main(interval: float = 1.0) -> None:
+    try:
+        ensure_sudo()
+    except RuntimeError as e:
+        console.print(f"[bold red]{e}[/bold red]")
+        return
+
     layout = build_layout()
+    last_error: Optional[str] = None
 
     with Live(layout, console=console, screen=True, refresh_per_second=10):
         while True:
             try:
                 raw = run_pmic_read_adc()
                 rails = parse_pmic_output(raw)
-            except Exception:
+            except KeyboardInterrupt:
+                raise
+            except Exception as e:
+                last_error = str(e)
+                layout["footer"].update(
+                    Panel(
+                        f"[bold red]Error:[/bold red] {last_error}",
+                        box=box.SQUARE,
+                    )
+                )
                 break
 
             now = time.time()
@@ -248,6 +278,9 @@ def main(interval: float = 1.0) -> None:
             layout["footer"].update(render_footer(now))
 
             time.sleep(interval)
+
+    if last_error:
+        console.print(f"\n[bold red]Stopped:[/bold red] {last_error}")
 
 if __name__ == "__main__":
     try:
