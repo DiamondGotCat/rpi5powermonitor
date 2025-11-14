@@ -66,3 +66,7 @@ This tool requires superuser privileges, enter your password if prompted.
 ```
 
 **Note:** When rpi5pm is executed within the expiration date of sudo authentication, the authentication prompt will be skipped.
+
+---
+
+![PyPI - Version](https://img.shields.io/pypi/v/rpi5powermonitor)
