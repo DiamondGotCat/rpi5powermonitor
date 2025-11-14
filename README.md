@@ -1,28 +1,51 @@
 
-<img width="1822" alt="スクリーンショット 2025-11-09 11 57 44" src="https://github.com/user-attachments/assets/ed6572a5-de46-443f-a419-c417a1648942" />
+<img width="1822" src="https://github.com/user-attachments/assets/ed6572a5-de46-443f-a419-c417a1648942" />
 
 # rpi5powermonitor
 Power Monitoring CLI Tool for Raspberry Pi 5+
 
+## Requiments
+- Raspberry Pi 5+
+- Linux (recommended: Raspberry Pi OS)
+- CPython 3.9+
+- `uv` [PyPI↗︎](https://pypi.org/project/uv/) or `pip3` [PyPI↗︎](https://pypi.org/project/pip/)
+- `rich` [PyPI↗︎](https://pypi.org/project/rich/)
+- `vcgencmd` [Embedded Linux Wiki↗︎](https://elinux.org/RPI_vcgencmd_usage/)
+
 ## Installation
 
-### uv
+### using uv (recommended)
 ```
 uv tool install rpi5powermonitor
 ```
 
-**Update**
+### using pip3
 
+**System Python:**
 ```
-uv tool install rpi5powermonitor --upgrade
+pip3 install rpi5powermonitor --break-system-packages
 ```
 
-### pip
+**Venv Python:**
 ```
 pip3 install rpi5powermonitor
 ```
 
-**Update**
+## Update
+
+### using uv (recommended)
+```
+uv tool install rpi5powermonitor --upgrade
+```
+
+### using pip3
+
+**System Python:**
+```
+pip3 install rpi5powermonitor --upgrade --break-system-packages
+```
+
+**Venv Python:**
 ```
 pip3 install rpi5powermonitor --upgrade
 ```
